@@ -1,0 +1,39 @@
+name: Auto Price Check Dealers
+
+on:
+  schedule:
+    - cron: '0 1 * * *' # Chạy lúc 8:00 sáng VN
+  workflow_dispatch:      # Nút chạy thủ công
+
+jobs:
+  scrape_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Liệt kê đường dẫn 20 file config của bạn ở đây
+        config_file: [
+          'configs/mbw.json'
+          # ... Thêm đủ 20 file vào đây
+        ]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Libraries
+      run: pip install -r requirements.txt
+
+    - name: Create Service Account File
+      # Bước này tạo lại file json từ Secret để Python dùng
+      run: |
+        echo '${{ secrets.GDRIVE_CREDS }}' > service_account.json
+
+    - name: Run Scraper
+      # Chạy code Python với file config tương ứng
+      run: python main.py ${{ matrix.config_file }}
