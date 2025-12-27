@@ -13,7 +13,7 @@ jobs:
       matrix:
         # Liệt kê đường dẫn 20 file config của bạn ở đây
         config_file: [
-          'configs/mbw.json'
+          'configs/cps.json'
           # ... Thêm đủ 20 file vào đây
         ]
 
