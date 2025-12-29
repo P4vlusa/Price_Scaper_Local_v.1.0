@@ -3,8 +3,8 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# --- ĐIỀN THÔNG TIN CỦA BẠN VÀO ĐÂY ---
-PARENT_FOLDER_ID = '1udCflvt7ujbLCDS2cU1YtNZ9K58i84q5' 
+# --- ĐIỀN ID THƯ MỤC CỦA BẠN VÀO ĐÂY ---
+PARENT_FOLDER_ID = '1H_xxxxxxxxxxxxxxxxxxxxxx'  # <--- NHỚ THAY ID VÀO ĐÂY
 SERVICE_ACCOUNT_FILE = 'service_account.json'
 
 def test_upload():
@@ -18,17 +18,22 @@ def test_upload():
         return
 
     print("2. Đang tạo file test...")
-    file_name = "test_ket_noi.txt"
+    file_name = "test_ket_noi.csv" # Đổi đuôi thành csv giả lập
     with open(file_name, "w") as f:
-        f.write("Xin chao! Robot da ket noi thanh cong.")
+        f.write("Cot A,Cot B\nDu lieu 1,Du lieu 2")
 
-    print("3. Đang upload lên Drive...")
+    print("3. Đang upload lên Drive (Chuyển sang Google Sheet)...")
     try:
+        # --- QUAN TRỌNG: CẤU HÌNH ĐỂ LÁCH LUẬT DUNG LƯỢNG ---
         file_metadata = {
-            'name': file_name,
-            'parents': [PARENT_FOLDER_ID]
+            'name': 'Test_Ket_Noi_Sheet',  # Tên file trên Drive
+            'parents': [PARENT_FOLDER_ID],
+            # Dòng này ép Google chuyển file CSV thành Google Sheet (Không tốn dung lượng)
+            'mimeType': 'application/vnd.google-apps.spreadsheet' 
         }
-        media = MediaFileUpload(file_name, mimetype='text/plain')
+        
+        # File gốc ở máy vẫn là CSV/Text
+        media = MediaFileUpload(file_name, mimetype='text/csv')
         
         file = service.files().create(
             body=file_metadata,
@@ -37,11 +42,11 @@ def test_upload():
         ).execute()
         
         print(f"✅ THÀNH CÔNG! File ID: {file.get('id')}")
-        print("👉 Hãy mở Google Drive kiểm tra xem có file 'test_ket_noi.txt' chưa.")
+        print("👉 Vào Drive xem có file 'Test_Ket_Noi_Sheet' (màu xanh lá) chưa.")
         
     except Exception as e:
-        print(f"❌ LỖI UPLOAD: {e}")
-        print("👉 Gợi ý: Kiểm tra xem bạn đã Share quyền Editor cho email trong service_account.json chưa?")
+        print(f"❌ VẪN LỖI: {e}")
+        print("👉 Kiểm tra: Bạn đã Share quyền EDITOR (Người chỉnh sửa) cho email Robot chưa?")
 
 if __name__ == "__main__":
     test_upload()
