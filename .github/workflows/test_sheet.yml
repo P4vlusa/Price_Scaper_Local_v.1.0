@@ -1,0 +1,29 @@
+name: Test Google Sheet
+on: workflow_dispatch  # Để có nút bấm chạy thủ công
+
+jobs:
+  test_sheet_job:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Lấy code về
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Cài Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # 3. CÀI THƯ VIỆN (QUAN TRỌNG: Đã thêm gspread và oauth2client)
+      - name: Install Libraries
+        run: |
+          pip install gspread oauth2client google-auth
+
+      # 4. Tạo file key từ Secret (GitHub không lưu file này nên phải tạo lại)
+      - name: Create Service Account File
+        run: echo '${{ secrets.GDRIVE_CREDS }}' > service_account.json
+
+      # 5. Chạy file test_sheet.py
+      - name: Run Test Script
+        run: python test_sheet.py
