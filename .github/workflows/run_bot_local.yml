@@ -1,0 +1,28 @@
+name: Run Laptop Price Tracker
+on:
+  schedule:
+    - cron: '0 3 * * *' # Chạy hàng ngày lúc 2h UTC (9h sáng VN)
+  workflow_dispatch: # Nút chạy tay
+
+jobs:
+  scrape_and_upload:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # CÀI ĐẦY ĐỦ THƯ VIỆN CẦN THIẾT
+      - name: Install Libraries
+        run: |
+          pip install selenium webdriver-manager gspread oauth2client google-auth
+
+      - name: Create Service Account File
+        run: echo '${{ secrets.GDRIVE_CREDS }}' > service_account.json
+
+      - name: Run Main Script
+        run: python main_local.py
