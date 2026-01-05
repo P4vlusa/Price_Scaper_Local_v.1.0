@@ -40,16 +40,6 @@ FOLDER_CONFIG = os.path.join(CURRENT_DIR, 'configs')
 # 2. CÁC HÀM XỬ LÝ
 # ==============================================================================
 
-def kill_old_processes():
-    """Dọn dẹp Chrome cũ"""
-    print("🧹 Đang dọn dẹp các process Chrome cũ...")
-    try:
-        if os.name == 'nt':
-            subprocess.call("taskkill /F /IM chrome.exe /T", shell=True, stderr=subprocess.DEVNULL)
-            subprocess.call("taskkill /F /IM chromedriver.exe /T", shell=True, stderr=subprocess.DEVNULL)
-    except Exception:
-        pass
-
 def get_google_sheet_client():
     """Kết nối Google Sheet"""
     print(f"🔑 Đang đọc file key tại: {SERVICE_ACCOUNT_FILE}")
