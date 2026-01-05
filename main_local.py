@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import io
 import time
 import random
 import glob
@@ -18,6 +19,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
+# --- DÁN ĐOẠN FIX VÀO ĐÂY ---
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+# ----------------------------
 # --- CẤU HÌNH ---
 FOLDER_CONFIG = 'configs_local'
 MAX_WORKERS = 10  # Số luồng chạy song song
