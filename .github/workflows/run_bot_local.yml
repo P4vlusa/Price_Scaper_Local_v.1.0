@@ -1,4 +1,4 @@
-name: Run Laptop Price Tracker
+name: Run Laptop Price Tracker Local
 on:
   schedule:
     - cron: '0 3 * * *' # Chạy hàng ngày lúc 2h UTC (9h sáng VN)
