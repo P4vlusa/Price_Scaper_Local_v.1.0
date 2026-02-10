@@ -2,7 +2,7 @@ name: Daily Price Scraper (Local)
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 1 * * *' # Chạy lúc 08h00 GTM+7 hàng ngày
   workflow_dispatch:
 
 jobs:
